@@ -1,4 +1,3 @@
-html
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -10,13 +9,13 @@ html
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --bg: #E1F5FE; /* Azul claro playero */
-    --stitch-main: #1976D2; /* Azul Stitch principal */
-    --stitch-light: #42A5F5; /* Azul Stitch brillante */
-    --space-dark: #0D1B2A; /* Azul espacial oscuro */
-    --ear-pink: #FF8A8A; /* Rosa orejas de Stitch */
-    --lilo-red: #D32F2F; /* Rojo vestido de Lilo */
-    --hawaii-teal: #0097A7; /* Turquesa de la isla */
+    --bg: #E1F5FE;
+    --stitch-main: #1976D2;
+    --stitch-light: #42A5F5;
+    --space-dark: #0D1B2A;
+    --ear-pink: #FF8A8A;
+    --lilo-red: #D32F2F;
+    --hawaii-teal: #0097A7;
     --green: #388E3C;
     --green-light: #E8F5E9;
     --red-light: #FFEBEE;
@@ -32,7 +31,6 @@ html
     overflow-x: hidden;
   }
 
-  /* Fondo decorativo con burbujas y flores del espacio */
   body::before {
     content: '';
     position: fixed;
@@ -45,13 +43,9 @@ html
     z-index: 0;
   }
 
-  /* ── PANTALLAS ── */
   .screen { display: none; position: relative; z-index: 1; }
   .screen.active { display: block; }
 
-  /* ══════════════════════════════
-     HOME / INICIO
-  ══════════════════════════════ */
   #home {
     display: flex;
     flex-direction: column;
@@ -130,9 +124,6 @@ html
   footer { text-align: center; font-size: 0.9rem; color: var(--stitch-main); font-weight: 700; margin-top: 50px; background: rgba(255,255,255,0.5); padding: 10px; border-radius: 20px; }
   footer span { color: var(--ear-pink); font-size: 1.2rem; }
 
-  /* ══════════════════════════════
-     PANTALLAS DE JUEGO (NAVEGACIÓN)
-  ══════════════════════════════ */
   .game-nav {
     display: flex;
     align-items: center;
@@ -168,7 +159,6 @@ html
     align-items: center;
   }
 
-  /* ── COMPONENTES COMPARTIDOS ── */
   .topbar { display:flex; align-items:center; justify-content:space-between; margin-bottom:15px; width:100%; max-width:540px; background:#fff; padding:12px; border-radius:15px; box-shadow: var(--shadow); }
   .stats { display:flex; gap:15px; }
   .stat { font-size:14px; color:#555; font-weight:700; }
@@ -181,9 +171,6 @@ html
   .p-stitch { background: linear-gradient(90deg, var(--stitch-main), var(--stitch-light)); }
   .p-hawaii { background: linear-gradient(90deg, var(--hawaii-teal), #26A69A); }
 
-  /* ══════════════════════════════
-     JUEGO 1: MEMORAMA DE EXPERIMENTOS
-  ══════════════════════════════ */
   .mat-grid {
     display: grid;
     grid-template-columns: repeat(4,1fr);
@@ -222,9 +209,6 @@ html
   .mcard.matched::after { content:'✓'; position:absolute; top:4px; right:8px; font-size:0.8rem; font-weight:bold; }
   @keyframes mpop { 0%{transform:scale(0.9)} 60%{transform:scale(1.1)} 100%{transform:scale(1)} }
 
-  /* ══════════════════════════════
-     JUEGO 2: INGLÉS DE LA ISLA
-  ══════════════════════════════ */
   .question-card {
     background:#fff;
     border-radius:var(--radius);
@@ -256,33 +240,34 @@ html
   .opt-btn.correct { background: var(--green-light) !important; border-color: var(--green) !important; color: var(--green) !important; font-weight: 900; }
   .opt-btn.wrong { background: var(--red-light) !important; border-color: #EF5350 !important; color: #C62828 !important; }
 
+  .feedback { text-align:center; font-size:1.2rem; font-weight:800; min-height:30px; margin-top:15px; }
+  .fb-ok { color:var(--green); }
+  .fb-no { color: var(--lilo-red); }
+</style>
+</head>
+<body>
+
+  <div id="home" class="screen active">
+    <div class="hero">
+      <span class="hero-emoji">🛸👽💙</span>
+      <h1>¡Ohana Games!</h1>
+      <p>Aprende jugando con Stitch ✨</p>
+    </div>
+
+    <div class="games">
+      <div class="game-card card-1" onclick="switchScreen('game1')">
+        <div class="card-header">
+          <span class="card-icon">🧬</span>
+          <h2>Experimento Numérico</h2>
+          <p>Encuentra las parejas de operaciones matemáticos.</p>
+        </div>
+        <div class="card-body">
+          <div class="tags">
 Usa el código con precaución.
-.feedback { text-align:center; font-size:1.2rem; font-weight:800; min-height:30px; margin-top:15px; }
-.fb-ok { color:var(--green); }
-.fb-no { color: var(--lilo-red); }
-
-
-
-
-
-🛸👽💙
-¡Ohana Games!
-Aprende jugando con Stitch ✨
-
-
-
-
-🧬
-Experimento Numérico
-Encuentra las parejas de operaciones matemáticos.
-
-
-
 Matemáticas
 Memoria
 
 ¡Iniciar Experimento!
-
 
 
 
@@ -301,7 +286,6 @@ Vocabulario
 Hecho para mi hermanita con 💙 Ohana
 
 
-
 🧬 Experimento Numérico de Stitch
 Regresar a la Nave
 
@@ -312,7 +296,6 @@ Intentos: 0
 Parejas: 0/6
 
 Reiniciar
-
 
 
 
@@ -344,14 +327,12 @@ Dog
 
 
 
-
 function switchScreen(screenId) {
 document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
 document.getElementById(screenId).classList.add('active');
 if(screenId === 'game1') initGame1();
 if(screenId === 'game2') initGame2();
 }
-/* --- LÓGICA MEMORAMA --- */
 let g1Cards = [], g1Flipped = [], g1Moves = 0, g1Matches = 0, g1Lock = false;
 const g1Data = [
 {op:'2 + 3', num:'5'}, {op:'7 - 4', num:'3'}, {op:'4 x 2', num:'8'},
@@ -411,7 +392,6 @@ g1Flipped = []; g1Lock = false;
 }
 }
 }
-/* --- LÓGICA INGLÉS --- */
 let g2Index = 0, g2Score = 0;
 const g2Data = [
 {eng:'Dog 🐶', options:['Perro', 'Gato', 'Pájaro'], correct:'Perro'},
@@ -463,3 +443,4 @@ btns.forEach(b => { if(b.innerText === correct) b.classList.add('correct'); });
 }
 setTimeout(() => { g2Index++; showQuestion(); }, 1800);
 }
+
