@@ -1,274 +1,244 @@
-html
-<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Experimento de Juegos de Stitch 👽💙</title>
-<link href="https://googleapis.com" rel="stylesheet">
+<link href="googleapis.com" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+--bg: #E1F5FE;
+--stitch-main: #1976D2;
+--stitch-light: #42A5F5;
+--space-dark: #0D1B2A;
+--ear-pink: #FF8A8A;
+--lilo-red: #D32F2F;
+--hawaii-teal: #0097A7;
+--green: #388E3C;
+--green-light: #E8F5E9;
+--red-light: #FFEBEE;
+--radius: 20px;
+--shadow: 0 8px 30px rgba(13, 27, 42, 0.15);
+}
+body {
+font-family: 'Nunito', sans-serif;
+background: var(--bg);
+color: var(--space-dark);
+min-height: 100vh;
+overflow-x: hidden;
+}
+body::before {
+content: '';
+position: fixed;
+inset: 0;
+background-image: radial-gradient(circle, #42A5F5 1.5px, transparent 1.5px), radial-gradient(circle, #FF8A8A 2px, transparent 2px);
+background-size: 50px 50px, 40px 40px;
+background-position: 0 0, 20px 20px;
+opacity: 0.25;
+pointer-events: none;
+z-index: 0;
+}
+.screen { display: none; position: relative; z-index: 1; }
+.screen.active { display: block; }
+#home {
+display: flex;
+flex-direction: column;
+align-items: center;
+padding: 50px 20px 60px;
+}
+#home.active { display: flex; }
+.hero { text-align: center; margin-bottom: 40px; animation: fadeDown 0.5s ease both; }
+.hero-emoji { font-size: clamp(3.5rem,12vw,5.5rem); display: block; margin-bottom: 15px; animation: floatStitch 3s ease-in-out infinite; }
+@keyframes floatStitch {
+0%, 100% { transform: translateY(0) rotate(0deg); }
+50% { transform: translateY(-15px) rotate(5deg); }
+}
+.hero h1 { font-size: clamp(2rem,7vw,3.5rem); font-weight: 900; color: var(--space-dark); text-shadow: 2px 2px 0px #fff; margin-bottom: 8px; }
+.hero p { font-size: clamp(1rem,3.5vw,1.3rem); color: var(--stitch-main); font-weight: 700; background: rgba(255,255,255,0.7); padding: 5px 15px; border-radius: 20px; display: inline-block; }
+@keyframes fadeDown { from{opacity:0;transform:translateY(-20px)} to{opacity:1;transform:translateY(0)} }
+@keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+.games {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+gap: 25px;
+width: 100%;
+max-width: 700px;
+}
+.game-card {
+background: #fff;
+border-radius: var(--radius);
+box-shadow: var(--shadow);
+overflow: hidden;
+cursor: pointer;
+transition: transform 0.3s, box-shadow 0.3s;
+animation: fadeUp 0.5s ease both;
+border: 3px solid transparent;
+}
+.game-card:nth-child(1) { animation-delay: 0.1s; border-color: var(--stitch-light); }
+.game-card:nth-child(2) { animation-delay: 0.2s; border-color: var(--hawaii-teal); }
+.game-card:hover { transform: translateY(-8px); box-shadow: 0 16px 40px rgba(25, 118, 210, 0.25); }
+.card-header { padding: 30px 24px 25px; text-align: center; }
+.card-1 .card-header { background: linear-gradient(135deg, var(--stitch-main), var(--stitch-light)); }
+.card-2 .card-header { background: linear-gradient(135deg, var(--hawaii-teal), #26A69A); }
+.card-icon { font-size: 3.5rem; display: block; margin-bottom: 12px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15)); }
+.card-header h2 { font-size: clamp(1.2rem,4.5vw,1.6rem); font-weight: 900; color: #fff; margin-bottom: 6px; }
+.card-header p { font-size: 0.9rem; color: rgba(255,255,255,0.9); font-weight: 600; }
+.card-body { background: #fff; padding: 20px 24px; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px; justify-content: center; }
+.tag { padding: 5px 14px; border-radius: 99px; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
+.card-1 .tag { background: #E3F2FD; color: var(--stitch-main); }
+.card-2 .tag { background: #E0F7FA; color: var(--hawaii-teal); }
+.play-btn {
+width: 100%;
+padding: 14px;
+border-radius: 14px;
+border: none;
+font-size: 1.1rem;
+font-family: 'Nunito', sans-serif;
+font-weight: 900;
+cursor: pointer;
+color: #fff;
+transition: background 0.2s, transform 0.1s;
+box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+.card-1 .play-btn { background: var(--stitch-main); }
+.card-2 .play-btn { background: var(--hawaii-teal); }
+.play-btn:hover { filter: brightness(1.1); }
+.play-btn:active { transform: scale(0.98); }
+footer { text-align: center; font-size: 0.9rem; color: var(--stitch-main); font-weight: 700; margin-top: 50px; background: rgba(255,255,255,0.5); padding: 10px; border-radius: 20px; }
+footer span { color: var(--ear-pink); font-size: 1.2rem; }
+.game-nav {
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 15px 20px;
+background: #fff;
+border-bottom: 3px solid var(--stitch-light);
+position: sticky;
+top: 0;
+z-index: 10;
+}
+.game-nav h2 { font-size: 1.2rem; font-weight: 900; color: var(--space-dark); }
+.back-btn {
+background: var(--ear-pink);
+border: none;
+border-radius: 99px;
+padding: 8px 18px;
+font-size: 13px;
+font-family: 'Nunito', sans-serif;
+font-weight: 900;
+cursor: pointer;
+color: #fff;
+box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+transition: transform 0.1s;
+}
+.back-btn:hover { filter: brightness(1.05); }
+.back-btn:active { transform: scale(0.95); }
+.game-inner {
+padding: 25px 16px 50px;
+display: flex;
+flex-direction: column;
+align-items: center;
+}
+.topbar { display:flex; align-items:center; justify-content:space-between; margin-bottom:15px; width:100%; max-width:540px; background:#fff; padding:12px; border-radius:15px; box-shadow: var(--shadow); }
+.stats { display:flex; gap:15px; }
+.stat { font-size:14px; color:#555; font-weight:700; }
+.stat b { color:var(--stitch-main); font-weight:900; }
+.g-btn { padding:8px 18px; font-size:14px; font-family:'Nunito',sans-serif; font-weight:900; border-radius:99px; border:none; background:var(--space-dark); color:#fff; cursor:pointer; }
+.g-btn:hover { filter: brightness(1.2); }
+.progress-wrap { width:100%; max-width:540px; height:10px; background:#fff; border-radius:99px; margin-bottom:20px; overflow:hidden; box-shadow: inset 0 2px 5px rgba(0,0,0,0.1); }
+.progress-bar { height:100%; border-radius:99px; transition:width 0.4s ease; }
+.p-stitch { background: linear-gradient(90deg, var(--stitch-main), var(--stitch-light)); }
+.p-hawaii { background: linear-gradient(90deg, var(--hawaii-teal), #26A69A); }
+.mat-grid {
+display: grid;
+grid-template-columns: repeat(4,1fr);
+gap: 12px;
+width: 100%;
+max-width: 540px;
+}
+.mcard {
+aspect-ratio: 1;
+border-radius: 16px;
+display: flex;
+align-items: center;
+justify-content: center;
+font-family: 'Nunito', sans-serif;
+font-weight: 900;
+cursor: pointer;
+user-select: none;
+transition: transform 0.2s, box-shadow 0.2s;
+box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+border: 3px solid transparent;
+position: relative;
+}
+.mcard.back {
+background: linear-gradient(135deg, var(--stitch-main), var(--stitch-light));
+color: #fff;
+font-size: 2rem;
+}
+.mcard.back:hover { transform:scale(1.05); box-shadow:0 8px 20px rgba(25, 118, 210, 0.4); }
+.mcard.op { background:#E3F2FD; color:var(--stitch-main); border-color:#BBDEFB; font-size:1.2rem; }
+.mcard.num { background:#E0F2F1; color:var(--hawaii-teal); border-color:#B2DFDB; font-size:1.5rem; }
+.mcard.matched {
+background:var(--green-light); border-color:var(--green); color:var(--green);
+cursor:default; animation: mpop 0.3s ease;
+}
+.mcard.matched::after { content:'✓'; position:absolute; top:4px; right:8px; font-size:0.8rem; font-weight:bold; }
+@keyframes mpop { 0%{transform:scale(0.9)} 60%{transform:scale(1.1)} 100%{transform:scale(1)} }
+.question-card {
+background:#fff;
+border-radius:var(--radius);
+box-shadow:var(--shadow);
+padding: 30px;
+text-align:center;
+width: 100%;
+max-width: 540px;
+border-top: 6px solid var(--hawaii-teal);
+}
+.q-word { font-size: 2.2rem; font-weight: 900; color: var(--space-dark); margin: 15px 0; }
+.options-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 20px; }
+.opt-btn {
+background: #F5F5F5;
+border: 2px solid #E0E0E0;
+border-radius: 15px;
+padding: 15px;
+font-size: 1.1rem;
+font-family: 'Nunito', sans-serif;
+font-weight: 700;
+color: var(--space-dark);
+cursor: pointer;
+transition: all 0.2s;
+text-align: center;
+}
+.opt-btn:hover { background: #E1F5FE; border-color: var(--stitch-light); transform: translateY(-2px); }
+.opt-btn.correct { background: var(--green-light) !important; border-color: var(--green) !important; color: var(--green) !important; font-weight: 900; }
+.opt-btn.wrong { background: var(--red-light) !important; border-color: #EF5350 !important; color: #C62828 !important; }
+.feedback { text-align:center; font-size:1.2rem; font-weight:800; min-height:30px; margin-top:15px; }
+.fb-ok { color:var(--green); }
+.fb-no { color: var(--lilo-red); }
 
-  :root {
-    --bg: #E1F5FE;
-    --stitch-main: #1976D2;
-    --stitch-light: #42A5F5;
-    --space-dark: #0D1B2A;
-    --ear-pink: #FF8A8A;
-    --lilo-red: #D32F2F;
-    --hawaii-teal: #0097A7;
-    --green: #388E3C;
-    --green-light: #E8F5E9;
-    --red-light: #FFEBEE;
-    --radius: 20px;
-    --shadow: 0 8px 30px rgba(13, 27, 42, 0.15);
-  }
 
-  body {
-    font-family: 'Nunito', sans-serif;
-    background: var(--bg);
-    color: var(--space-dark);
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
 
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: radial-gradient(circle, #42A5F5 1.5px, transparent 1.5px), radial-gradient(circle, #FF8A8A 2px, transparent 2px);
-    background-size: 50px 50px, 40px 40px;
-    background-position: 0 0, 20px 20px;
-    opacity: 0.25;
-    pointer-events: none;
-    z-index: 0;
-  }
 
-  .screen { display: none; position: relative; z-index: 1; }
-  .screen.active { display: block; }
 
-  #home {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 50px 20px 60px;
-  }
-  #home.active { display: flex; }
+🛸👽💙
+¡Ohana Games!
+Aprende jugando con Stitch ✨
 
-  .hero { text-align: center; margin-bottom: 40px; animation: fadeDown 0.5s ease both; }
-  .hero-emoji { font-size: clamp(3.5rem,12vw,5.5rem); display: block; margin-bottom: 15px; animation: floatStitch 3s ease-in-out infinite; }
-  
-  @keyframes floatStitch {
-    0%, 100% { transform: translateY(0) rotate(0deg); }
-    50% { transform: translateY(-15px) rotate(5deg); }
-  }
-  
-  .hero h1 { font-size: clamp(2rem,7vw,3.5rem); font-weight: 900; color: var(--space-dark); text-shadow: 2px 2px 0px #fff; margin-bottom: 8px; }
-  .hero p { font-size: clamp(1rem,3.5vw,1.3rem); color: var(--stitch-main); font-weight: 700; background: rgba(255,255,255,0.7); padding: 5px 15px; border-radius: 20px; display: inline-block; }
 
-  @keyframes fadeDown { from{opacity:0;transform:translateY(-20px)} to{opacity:1;transform:translateY(0)} }
-  @keyframes fadeUp   { from{opacity:0;transform:translateY(20px)}  to{opacity:1;transform:translateY(0)} }
 
-  .games {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 25px;
-    width: 100%;
-    max-width: 700px;
-  }
 
-  .game-card {
-    background: #fff;
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    overflow: hidden;
-    cursor: pointer;
-    transition: transform 0.3s, box-shadow 0.3s;
-    animation: fadeUp 0.5s ease both;
-    border: 3px solid transparent;
-  }
-  .game-card:nth-child(1) { animation-delay: 0.1s; border-color: var(--stitch-light); }
-  .game-card:nth-child(2) { animation-delay: 0.2s; border-color: var(--hawaii-teal); }
-  .game-card:hover { transform: translateY(-8px); box-shadow: 0 16px 40px rgba(25, 118, 210, 0.25); }
+🧬
+Experimento Numérico
+Encuentra las parejas de operaciones matemáticas.
 
-  .card-header { padding: 30px 24px 25px; text-align: center; }
-  .card-1 .card-header { background: linear-gradient(135deg, var(--stitch-main), var(--stitch-light)); }
-  .card-2 .card-header { background: linear-gradient(135deg, var(--hawaii-teal), #26A69A); }
-  .card-icon { font-size: 3.5rem; display: block; margin-bottom: 12px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15)); }
-  .card-header h2 { font-size: clamp(1.2rem,4.5vw,1.6rem); font-weight: 900; color: #fff; margin-bottom: 6px; }
-  .card-header p { font-size: 0.9rem; color: rgba(255,255,255,0.9); font-weight: 600; }
-
-  .card-body { background: #fff; padding: 20px 24px; }
-  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px; justify-content: center; }
-  .tag { padding: 5px 14px; border-radius: 99px; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
-  .card-1 .tag { background: #E3F2FD; color: var(--stitch-main); }
-  .card-2 .tag { background: #E0F7FA; color: var(--hawaii-teal); }
-
-  .play-btn {
-    width: 100%;
-    padding: 14px;
-    border-radius: 14px;
-    border: none;
-    font-size: 1.1rem;
-    font-family: 'Nunito', sans-serif;
-    font-weight: 900;
-    cursor: pointer;
-    color: #fff;
-    transition: background 0.2s, transform 0.1s;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  }
-  .card-1 .play-btn { background: var(--stitch-main); }
-  .card-2 .play-btn { background: var(--hawaii-teal); }
-  .play-btn:hover { filter: brightness(1.1); }
-  .play-btn:active { transform: scale(0.98); }
-
-  footer { text-align: center; font-size: 0.9rem; color: var(--stitch-main); font-weight: 700; margin-top: 50px; background: rgba(255,255,255,0.5); padding: 10px; border-radius: 20px; }
-  footer span { color: var(--ear-pink); font-size: 1.2rem; }
-
-  .game-nav {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 15px 20px;
-    background: #fff;
-    border-bottom: 3px solid var(--stitch-light);
-    position: sticky;
-    top: 0;
-    z-index: 10;
-  }
-  .game-nav h2 { font-size: 1.2rem; font-weight: 900; color: var(--space-dark); }
-  .back-btn {
-    background: var(--ear-pink);
-    border: none;
-    border-radius: 99px;
-    padding: 8px 18px;
-    font-size: 13px;
-    font-family: 'Nunito', sans-serif;
-    font-weight: 900;
-    cursor: pointer;
-    color: #fff;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
-    transition: transform 0.1s;
-  }
-  .back-btn:hover { filter: brightness(1.05); }
-  .back-btn:active { transform: scale(0.95); }
-
-  .game-inner {
-    padding: 25px 16px 50px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .topbar { display:flex; align-items:center; justify-content:space-between; margin-bottom:15px; width:100%; max-width:540px; background:#fff; padding:12px; border-radius:15px; box-shadow: var(--shadow); }
-  .stats { display:flex; gap:15px; }
-  .stat { font-size:14px; color:#555; font-weight:700; }
-  .stat b { color:var(--stitch-main); font-weight:900; }
-  .g-btn { padding:8px 18px; font-size:14px; font-family:'Nunito',sans-serif; font-weight:900; border-radius:99px; border:none; background:var(--space-dark); color:#fff; cursor:pointer; }
-  .g-btn:hover { filter: brightness(1.2); }
-
-  .progress-wrap { width:100%; max-width:540px; height:10px; background:#fff; border-radius:99px; margin-bottom:20px; overflow:hidden; box-shadow: inset 0 2px 5px rgba(0,0,0,0.1); }
-  .progress-bar { height:100%; border-radius:99px; transition:width 0.4s ease; }
-  .p-stitch { background: linear-gradient(90deg, var(--stitch-main), var(--stitch-light)); }
-  .p-hawaii { background: linear-gradient(90deg, var(--hawaii-teal), #26A69A); }
-
-  .mat-grid {
-    display: grid;
-    grid-template-columns: repeat(4,1fr);
-    gap: 12px;
-    width: 100%;
-    max-width: 540px;
-  }
-  .mcard {
-    aspect-ratio: 1;
-    border-radius: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Nunito', sans-serif;
-    font-weight: 900;
-    cursor: pointer;
-    user-select: none;
-    transition: transform 0.2s, box-shadow 0.2s;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    border: 3px solid transparent;
-    position: relative;
-  }
-  .mcard.back {
-    background: linear-gradient(135deg, var(--stitch-main), var(--stitch-light));
-    color: #fff;
-    font-size: 2rem;
-  }
-  .mcard.back:hover { transform:scale(1.05); box-shadow:0 8px 20px rgba(25, 118, 210, 0.4); }
-  .mcard.op  { background:#E3F2FD; color:var(--stitch-main); border-color:#BBDEFB; font-size:1.2rem; }
-  .mcard.num { background:#E0F2F1; color:var(--hawaii-teal); border-color:#B2DFDB; font-size:1.5rem; }
-
-  .mcard.matched {
-    background:var(--green-light); border-color:var(--green); color:var(--green);
-    cursor:default; animation: mpop 0.3s ease;
-  }
-  .mcard.matched::after { content:'✓'; position:absolute; top:4px; right:8px; font-size:0.8rem; font-weight:bold; }
-  @keyframes mpop { 0%{transform:scale(0.9)} 60%{transform:scale(1.1)} 100%{transform:scale(1)} }
-
-  .question-card {
-    background:#fff;
-    border-radius:var(--radius);
-    box-shadow:var(--shadow);
-    padding: 30px;
-    text-align:center;
-    width: 100%;
-    max-width: 540px;
-    border-top: 6px solid var(--hawaii-teal);
-  }
-  .q-word { font-size: 2.2rem; font-weight: 900; color: var(--space-dark); margin: 15px 0; }
-  .options-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 20px; }
-  
-  .opt-btn {
-    background: #F5F5F5;
-    border: 2px solid #E0E0E0;
-    border-radius: 15px;
-    padding: 15px;
-    font-size: 1.1rem;
-    font-family: 'Nunito', sans-serif;
-    font-weight: 700;
-    color: var(--space-dark);
-    cursor: pointer;
-    transition: all 0.2s;
-    text-align: center;
-  }
-  .opt-btn:hover { background: #E1F5FE; border-color: var(--stitch-light); transform: translateY(-2px); }
-  
-  .opt-btn.correct { background: var(--green-light) !important; border-color: var(--green) !important; color: var(--green) !important; font-weight: 900; }
-  .opt-btn.wrong { background: var(--red-light) !important; border-color: #EF5350 !important; color: #C62828 !important; }
-
-  .feedback { text-align:center; font-size:1.2rem; font-weight:800; min-height:30px; margin-top:15px; }
-  .fb-ok { color:var(--green); }
-  .fb-no { color: var(--lilo-red); }
-</style>
-</head>
-<body>
-
-  <div id="home" class="screen active">
-    <div class="hero">
-      <span class="hero-emoji">🛸👽💙</span>
-      <h1>¡Ohana Games!</h1>
-      <p>Aprende jugando con Stitch ✨</p>
-    </div>
-
-    <div class="games">
-      <div class="game-card card-1" onclick="switchScreen('game1')">
-        <div class="card-header">
-          <span class="card-icon">🧬</span>
-          <h2>Experimento Numérico</h2>
-          <p>Encuentra las parejas de operaciones matemáticas.</p>
-        </div>
-        <div class="card-body">
-          <div class="tags">
 
 Matemáticas
 Memoria
 
 ¡Iniciar Experimento!
+
 
 
 
@@ -284,7 +254,9 @@ Vocabulario
 ¡Explorar Isla!
 
 
+
 Hecho para mi hermanita con 💙 Ohana
+
 
 
 🧬 Experimento Numérico de Stitch
@@ -297,6 +269,7 @@ Intentos: 0
 Parejas: 0/6
 
 Reiniciar
+
 
 
 
@@ -323,6 +296,7 @@ Reiniciar
 
 ¿Cómo se dice en Español?
 Dog
+
 
 
 
@@ -443,5 +417,3 @@ document.getElementById('g2-feedback').innerText = ¡Oh no! Era: ${correct} 💫
 btns.forEach(b => { if(b.innerText === correct) b.classList.add('correct'); });
 }
 setTimeout(() => { g2Index++; showQuestion(); }, 1800);
-}
-
